@@ -4,15 +4,15 @@ import twilio from "twilio";
 
 const app = express();
 
-// Twilio sendet Daten als application/x-www-form-urlencoded
+// Twilio sendet application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Health-Check (optional, aber gut)
+// Test-Route
 app.get("/", (req, res) => {
   res.send("WhatsApp Bot läuft ✅");
 });
 
-// 🔥 DAS IST DER WICHTIGE TEIL 🔥
+// 🔥 TWILIO WEBHOOK 🔥
 app.post("/twilio/inbound", (req, res) => {
   const incomingMessage = req.body.Body;
   const from = req.body.From;
@@ -24,17 +24,15 @@ app.post("/twilio/inbound", (req, res) => {
   twiml.message(
     "Hallo 👋\n" +
     "Willkommen bei Orhan’s Café ☕🥐\n\n" +
-    "Dieser Bot ist gerade im Aufbau.\n" +
-    "Bestellungen folgen bald!"
+    "Der WhatsApp-Bot ist jetzt aktiv.\n" +
+    "Bestellfunktion folgt gleich!"
   );
 
   res.type("text/xml");
   res.send(twiml.toString());
 });
 
-// Render nutzt process.env.PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log("🚀 Server läuft auf Port", PORT);
 });
-
